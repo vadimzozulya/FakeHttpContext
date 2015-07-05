@@ -35,7 +35,7 @@ public void Should_allow_to_use_map_path()
   using (new FakeHttpContext())
   {
 	// Act && Assert
-	HttpContext.Current.Server.MapPath(path).Should().Be(expectedPath);
+	HttpContext.Current.Server.MapPath("myPath").Should().Be(expectedPath);
   }
 }
 ```
