@@ -16,7 +16,7 @@
     [Fact]
     public void Should_initialize_httpContext_current()
     {
-      // Arrange
+      // Act
       using (new FakeHttpContext())
       {
         // Assert
@@ -34,9 +34,11 @@
         new HttpResponse(new StringWriter()));
       HttpContext.Current = httpContext;
 
+      // Act
       using (new FakeHttpContext())
       {
-        HttpContext.Current = null;
+        // Assert
+        HttpContext.Current.Should().NotBeSameAs(httpContext);
       }
 
       HttpContext.Current.Should().BeSameAs(httpContext);
@@ -48,9 +50,10 @@
       // Arrange
       var expectedPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
 
+      // Act
       using (new FakeHttpContext())
       {
-        // Act && Assert
+        // Assert
         HttpContext.Current.Server.MapPath(path).Should().Be(expectedPath);
       }
     }
@@ -58,25 +61,12 @@
     [Theory, AutoData]
     public void Should_fake_user_agent(string userAgentString)
     {
-      // Arrange
+      // Arrange && Act
       using (new FakeHttpContext().WithUserAgent(userAgentString))
       {
-        // Act
         // Assert
         HttpContext.Current.Request.UserAgent.Should().Be(userAgentString);
       }
     }
-
-    public void Should_fake_user_agent1()
-    {
-      // Arrange
-      const string ExpectedUserAgentString = "user agent string";
-      using (new FakeHttpContext().WithUserAgent(ExpectedUserAgentString))
-      {
-        // Assert
-        HttpContext.Current.Request.UserAgent.Should().Be(ExpectedUserAgentString);
-      }
-    }
-
   }
 }
