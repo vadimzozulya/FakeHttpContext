@@ -1,7 +1,6 @@
 namespace FakeHttpContext
 {
   using System;
-  using System.Collections.Generic;
   using System.Reflection;
   using System.Web;
   using System.Web.Hosting;
@@ -22,6 +21,23 @@ namespace FakeHttpContext
 
       this.conextBackup = HttpContext.Current;
       HttpContext.Current = new HttpContext(this.fakeWorkerRequest);
+    }
+
+    public FakeHttpContext WithUserAgent(string userAgentString)
+    {
+      this.fakeWorkerRequest.UserAgent = userAgentString;
+      return this;
+    }
+
+    public FakeHttpContext WithUri(Uri uri)
+    {
+      this.fakeWorkerRequest.Uri = uri;
+      return this;
+    }
+
+    public void Dispose()
+    {
+      HttpContext.Current = this.conextBackup;
     }
 
     private static void InitHostEnvironment()
@@ -69,17 +85,6 @@ namespace FakeHttpContext
       dom.SetData(".domainId", dom.FriendlyName);
       dom.SetData(".hostingVirtualPath", "/");
       dom.SetData(".hostingInstallDir", HttpRuntime.AspInstallDirectory);
-    }
-
-    public IDisposable WithUserAgent(string userAgentString)
-    {
-      this.fakeWorkerRequest.UserAgent = userAgentString;
-      return this;
-    }
-
-    public void Dispose()
-    {
-      HttpContext.Current = this.conextBackup;
     }
   }
 }

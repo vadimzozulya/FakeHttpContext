@@ -68,5 +68,16 @@
         HttpContext.Current.Request.UserAgent.Should().Be(userAgentString);
       }
     }
+
+    [Theory, AutoData]
+    public void Should_fake_url(Uri uri)
+    {
+      // Act
+      using (new FakeHttpContext().WithUri(uri))
+      {
+        // Assert
+        HttpContext.Current.Request.Url.Should().Be(uri);
+      }
+    }
   }
 }

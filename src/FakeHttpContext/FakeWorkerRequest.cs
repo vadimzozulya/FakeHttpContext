@@ -5,7 +5,22 @@ namespace FakeHttpContext
 
   internal class FakeWorkerRequest : HttpWorkerRequest
   {
+    private Uri uri;
+
     public string UserAgent { get; set; }
+
+    public Uri Uri
+    {
+      get
+      {
+        return this.uri ?? (this.uri = new Uri("http://[::1]:4293/Default"));
+      }
+
+      set
+      {
+        this.uri = value;
+      }
+    }
 
     /// <summary>
     /// Returns the virtual path to the requested URI.
@@ -15,7 +30,7 @@ namespace FakeHttpContext
     /// </returns>
     public override string GetUriPath()
     {
-      return "/Default";
+      return this.Uri.LocalPath;
     }
 
     /// <summary>
@@ -26,7 +41,7 @@ namespace FakeHttpContext
     /// </returns>
     public override string GetQueryString()
     {
-      return "";
+      return this.Uri.Query;
     }
 
     /// <summary>
@@ -92,7 +107,7 @@ namespace FakeHttpContext
     /// </returns>
     public override string GetLocalAddress()
     {
-      return "::1";
+      return this.Uri.Host;
     }
 
     /// <summary>
@@ -103,7 +118,7 @@ namespace FakeHttpContext
     /// </returns>
     public override int GetLocalPort()
     {
-      return 4293;
+      return this.Uri.Port;
     }
 
     /// <summary>
@@ -186,7 +201,26 @@ namespace FakeHttpContext
     /// <param name="index">The index of the header. For example, the <see cref="F:System.Web.HttpWorkerRequest.HeaderAllow"/> field. </param>
     public override string GetKnownRequestHeader(int index)
     {
-      return index == HeaderUserAgent ? this.UserAgent : null;
+      switch (index)
+      {
+        case HttpWorkerRequest.HeaderUserAgent:
+          return this.UserAgent;
+        case HttpWorkerRequest.HeaderHost:
+          return this.Uri.Host + ":" + this.Uri.Port;
+      }
+
+      return null;
+    }
+
+    /// <summary>
+    /// When overridden in a derived class, returns the HTTP protocol (HTTP or HTTPS).
+    /// </summary>
+    /// <returns>
+    /// HTTPS if the <see cref="M:System.Web.HttpWorkerRequest.IsSecure"/> method is true, otherwise HTTP.
+    /// </returns>
+    public override string GetProtocol()
+    {
+      return this.Uri.Scheme;
     }
   }
 }
