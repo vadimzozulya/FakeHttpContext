@@ -41,6 +41,10 @@
     <Compile Include="FakeWorkerRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensions.cs" />
+    <Compile Include="Switchers\AppDomainDataSwitcher.cs" />
+    <Compile Include="Switchers\FakeHostEnvironment.cs" />
+    <Compile Include="Switchers\PrivateFieldSwitcher.cs" />
+    <Compile Include="Switchers\SwitcherContainer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

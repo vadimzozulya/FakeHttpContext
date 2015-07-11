@@ -79,5 +79,20 @@
         HttpContext.Current.Request.Url.Should().Be(uri);
       }
     }
+
+    [Theory, AutoData]
+    public void Should_fake_app_domain_path()
+    {
+      // Arrange
+      // this is necessary to call HttpRuntime static constructor
+      HttpRuntime.AppDomainId.Should().BeNullOrEmpty();
+
+      // Act
+      using (new FakeHttpContext())
+      {
+        // Assert
+        HttpRuntime.AppDomainAppPath.Should().Be(AppDomain.CurrentDomain.BaseDirectory);
+      }
+    }
   }
 }
