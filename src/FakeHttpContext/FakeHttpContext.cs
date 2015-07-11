@@ -18,16 +18,20 @@ namespace FakeHttpContext
       HttpContext.Current = new HttpContext(this.fakeWorkerRequest);
     }
 
-    public FakeHttpContext WithUserAgent(string userAgentString)
+    public string UserAgent
     {
-      this.fakeWorkerRequest.UserAgent = userAgentString;
-      return this;
+      set
+      {
+        this.fakeWorkerRequest.UserAgent = value;
+      }
     }
 
-    public FakeHttpContext WithUri(Uri uri)
+    public Uri Uri
     {
-      this.fakeWorkerRequest.Uri = uri;
-      return this;
+      set
+      {
+        this.fakeWorkerRequest.Uri = value;
+      }
     }
 
     public override void Dispose()

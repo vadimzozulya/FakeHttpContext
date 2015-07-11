@@ -62,7 +62,7 @@
     public void Should_fake_user_agent(string userAgentString)
     {
       // Arrange && Act
-      using (new FakeHttpContext().WithUserAgent(userAgentString))
+      using (new FakeHttpContext { UserAgent = userAgentString })
       {
         // Assert
         HttpContext.Current.Request.UserAgent.Should().Be(userAgentString);
@@ -73,7 +73,7 @@
     public void Should_fake_url(Uri uri)
     {
       // Act
-      using (new FakeHttpContext().WithUri(uri))
+      using (new FakeHttpContext { Uri = uri })
       {
         // Assert
         HttpContext.Current.Request.Url.Should().Be(uri);
