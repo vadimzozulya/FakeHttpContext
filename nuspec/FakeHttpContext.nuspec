@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>FakeHttpContext</id>
+    <version>00.00</version>
+    <authors>Vadim Zozulya</authors>
+    <owners>Vadim Zozulya</owners>
+    <projectUrl>https://github.com/vadimzozulya/FakeHttpContext</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Fake HttpContext for unit tests</description>
+    <releaseNotes>Supported feature: *MapPath *Request URL *UserAgent *Session *Browser capabilities</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>HttpContext Unit Tests</tags>
+  </metadata>
+  <files>
+    <file src="..\src\FakeHttpContext\bin\Release\FakeHttpContext.dll" target="lib/net45" />
+  </files>
+</package>
