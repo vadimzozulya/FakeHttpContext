@@ -1,6 +1,7 @@
 namespace FakeHttpContext
 {
   using System;
+  using System.Collections;
   using System.Reflection;
   using System.Web;
   using System.Web.SessionState;
@@ -18,6 +19,8 @@ namespace FakeHttpContext
       this.conextBackup = HttpContext.Current;
       this.Switchers.Add(new FakeHostEnvironment());
       HttpContext.Current = new HttpContext(this.fakeWorkerRequest);
+
+      HttpContext.Current.Request.Browser = new HttpBrowserCapabilities { Capabilities = new Hashtable() };
 
       var sessionContainer = new HttpSessionStateContainer(
            "id",
@@ -43,6 +46,7 @@ namespace FakeHttpContext
       set
       {
         this.fakeWorkerRequest.UserAgent = value;
+        this.Capabilities["browser"] = value;
       }
     }
 
@@ -52,6 +56,12 @@ namespace FakeHttpContext
       {
         this.fakeWorkerRequest.Uri = value;
       }
+    }
+
+    public IDictionary Capabilities
+    {
+      get { return HttpContext.Current.Request.Browser.Capabilities; }
+      set { HttpContext.Current.Request.Browser.Capabilities = value; }
     }
 
     public override void Dispose()

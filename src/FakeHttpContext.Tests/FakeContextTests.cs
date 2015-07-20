@@ -1,6 +1,7 @@
 ﻿namespace FakeHttpContext.Tests
 {
   using System;
+  using System.Collections;
   using System.IO;
   using System.Web;
 
@@ -121,6 +122,42 @@
         // Assert
         HttpContext.Current.Session.Should().NotBeNull();
         HttpContext.Current.Session[key].Should().Be(value);
+      }
+    }
+
+    [Fact]
+    public void Should_fake_browser_capabilities()
+    {
+      // Act
+      using (new FakeHttpContext())
+      {
+        // Assert
+        HttpContext.Current.Request.Browser.Should().NotBeNull();
+      }
+    }
+
+    [Theory, AutoData]
+    public void Should_fake_capabilities_properties(string version, object key, object value)
+    {
+      // Act
+      using (var context = new FakeHttpContext { Capabilities = new Hashtable { { "version", version } } })
+      {
+        HttpContext.Current.Request.Browser.Capabilities[key] = value;
+
+        // Assert
+        HttpContext.Current.Request.Browser.Version.Should().Be(version);
+        context.Capabilities[key].Should().Be(value);
+      }
+    }
+
+    [Theory, AutoData]
+    public void Should_fake_browser_user_agent(string userAgent)
+    {
+      // Act
+      using (new FakeHttpContext { UserAgent = userAgent })
+      {
+        // Assert
+        HttpContext.Current.Request.Browser.Browser.Should().Be(userAgent);
       }
     }
   }
