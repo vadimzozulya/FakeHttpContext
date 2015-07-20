@@ -37,8 +37,10 @@
     }
 
     [Theory]
-    [InlineData("git://server.com/path?query=1")]
-    public void Should_read_all_data_from_uri(string uriString)
+    [InlineData("git://server.com/path", "")]
+    [InlineData("git://server.com/path?query=1", "query=1")]
+    [InlineData("git://server.com/path?query1=1&query2=2", "query1=1&query2=2")]
+    public void Should_read_all_data_from_uri(string uriString, string expectedQuery)
     {
       // Arrange
       var uri = new Uri(uriString);
@@ -53,7 +55,7 @@
       worker.GetServerName().Should().Be(uri.Host);
       worker.GetLocalPort().Should().Be(uri.Port);
       worker.GetUriPath().Should().Be(uri.LocalPath);
-      worker.GetQueryString().Should().Be(uri.Query);
+      worker.GetQueryString().Should().Be(expectedQuery);
     }
   }
 }

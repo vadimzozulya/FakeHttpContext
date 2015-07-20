@@ -41,7 +41,7 @@ namespace FakeHttpContext
     /// </returns>
     public override string GetQueryString()
     {
-      return this.Uri.Query;
+      return this.Uri.Query.TrimStart('?');
     }
 
     /// <summary>

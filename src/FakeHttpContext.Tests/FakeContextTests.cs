@@ -94,5 +94,20 @@
         HttpRuntime.AppDomainAppPath.Should().Be(AppDomain.CurrentDomain.BaseDirectory);
       }
     }
+
+    [Theory]
+    [InlineData("http://test?", "query1", null)]
+    [InlineData("http://test?query1=1&query2=2", "query1", "1")]
+    [InlineData("http://test?query1=1&query2=2", "query2", "2")]
+    public void Should_fake_query_string(string uriString, string queryKey, string expectedValue)
+    {
+      // Arrange
+      // Act
+      using (new FakeHttpContext { Uri = new Uri(uriString) })
+      {
+        // Assert
+        HttpContext.Current.Request.QueryString[queryKey].Should().Be(expectedValue);
+      }
+    }
   }
 }
