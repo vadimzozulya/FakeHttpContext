@@ -1,7 +1,9 @@
 namespace FakeHttpContext
 {
   using System;
+  using System.Reflection;
   using System.Web;
+  using System.Web.SessionState;
 
   using global::FakeHttpContext.Switchers;
 
@@ -16,6 +18,24 @@ namespace FakeHttpContext
       this.conextBackup = HttpContext.Current;
       this.Switchers.Add(new FakeHostEnvironment());
       HttpContext.Current = new HttpContext(this.fakeWorkerRequest);
+
+      var sessionContainer = new HttpSessionStateContainer(
+           "id",
+           new SessionStateItemCollection(),
+           new HttpStaticObjectsCollection(),
+           10,
+           true,
+           HttpCookieMode.AutoDetect,
+           SessionStateMode.InProc,
+           false);
+
+      HttpContext.Current.Items["AspSession"] =
+        typeof(HttpSessionState).GetConstructor(
+          BindingFlags.NonPublic | BindingFlags.Instance,
+          null,
+          CallingConventions.Standard,
+          new[] { typeof(HttpSessionStateContainer) },
+          null).Invoke(new object[] { sessionContainer });
     }
 
     public string UserAgent

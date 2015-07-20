@@ -109,5 +109,19 @@
         HttpContext.Current.Request.QueryString[queryKey].Should().Be(expectedValue);
       }
     }
+
+    [Theory, AutoData]
+    public void Should_fake_session(string key, object value)
+    {
+      // Act
+      using (new FakeHttpContext())
+      {
+        HttpContext.Current.Session[key] = value;
+
+        // Assert
+        HttpContext.Current.Session.Should().NotBeNull();
+        HttpContext.Current.Session[key].Should().Be(value);
+      }
+    }
   }
 }
