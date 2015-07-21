@@ -1,4 +1,14 @@
+
+FakeHttpContext
+===============
+
+![#](https://img.shields.io/nuget/dt/FakeHttpContext.svg)
+![#](https://img.shields.io/nuget/v/FakeHttpContext.svg)
+
 This util allow to initialize HttpContex.Current with fake context.
+
+## Install with NuGet
+You can install the utility with [NuGet](https://www.nuget.org/packages/FakeHttpContext/)
 
 Examples
 ---
@@ -9,8 +19,8 @@ public void Should_initialize_HttpContext_Current()
   // Arrange
   using (new FakeHttpContext())
   {
-	// Assert
-	HttpContext.Current.Should().NotBeNull();
+    // Assert
+    HttpContext.Current.Should().NotBeNull();
   }
 }
 
@@ -19,10 +29,10 @@ public void Should_fake_user_agent()
 {
   // Arrange
   const string ExpectedUserAgentString = "user agent string";
-  using (new FakeHttpContext().WithUserAgent(ExpectedUserAgentString))
+  using (new FakeHttpContext {UserAgent = ExpectedUserAgentString})
   {
-	// Assert
-	HttpContext.Current.Request.UserAgent.Should().Be(ExpectedUserAgentString);
+    // Assert
+    HttpContext.Current.Request.UserAgent.Should().Be(ExpectedUserAgentString);
   }
 }
 
@@ -32,10 +42,11 @@ public void Should_allow_to_use_map_path()
   // Arrange
   var expectedPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "myPath");
 
+  // Act
   using (new FakeHttpContext())
   {
-	// Act && Assert
-	HttpContext.Current.Server.MapPath("myPath").Should().Be(expectedPath);
+  // Assert
+    HttpContext.Current.Server.MapPath("myPath").Should().Be(expectedPath);
   }
 }
 ```
