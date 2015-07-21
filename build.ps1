@@ -2,8 +2,18 @@ param
 (
   [Parameter(Mandatory=$false)][string] $nugetPackagesOutput = $PSScriptRoot + "\output",
   [Parameter(Mandatory=$false)][string] $msbuild = "C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild.exe",
-  [Parameter(Mandatory=$false)][string] $nugetExe = ".\src\.nuget\NuGet.exe"
+  [Parameter(Mandatory=$false)][string] $nugetExe = ".\src\.nuget\NuGet.exe",
+  [switch] $pushPackage
 )
+
+function Ask-YesOrNo {
+  param([string]$title="Confirm",[string]$message="Are you sure?")
+  $choiceYes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "Answer Yes."
+  $choiceNo = New-Object System.Management.Automation.Host.ChoiceDescription "&No", "Answer No."
+  $options = [System.Management.Automation.Host.ChoiceDescription[]]($choiceYes, $choiceNo)
+  $result = $host.ui.PromptForChoice($title, $message, $options, 1)
+  return ($result -eq 0)
+}
 
 function Build-Solution(){
   $solution = ".\src\FakeHttpContext.sln"
@@ -33,5 +43,20 @@ function Build-Nuget-Packages(){
   }
 }
 
+function Push-Nuget-Package(){
+  $packages = Get-ChildItem -Path $nugetPackagesOutput
+
+  $names = [string]::Join("`n", $packages.Name)
+  if (Ask-YesOrNo(" Will be pushed to the server: `n$names")) {
+    $packages | foreach {
+      $package = $_.FullName
+      iex "$nugetExe push $package"
+    }
+  }
+}
+
 Build-Solution
 Build-Nuget-Packages
+if ($pushPackage) {
+  Push-Nuget-Package
+}
