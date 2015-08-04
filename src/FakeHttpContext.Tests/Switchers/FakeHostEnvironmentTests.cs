@@ -86,5 +86,21 @@
         action.ShouldNotThrow();
       }
     }
+
+    [Fact]
+    public void Should_set_appPhisicalPath()
+    {
+      // Act
+      using (var fakeEnvironment = new FakeHostEnvironment())
+      {
+        // Assert
+        fakeEnvironment.Switchers.Should()
+          .Contain(
+            x =>
+            x is PrivateFieldSwitcher
+            && ((PrivateFieldSwitcher)x).FieldName == "_appPhysicalPath"
+            && (string)((PrivateFieldSwitcher)x).NewValue == AppDomain.CurrentDomain.BaseDirectory);
+      }
+    }
   }
 }
