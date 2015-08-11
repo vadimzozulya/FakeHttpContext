@@ -160,5 +160,17 @@
         HttpContext.Current.Request.Browser.Browser.Should().Be(userAgent);
       }
     }
+
+    [Fact]
+    public void Should_be_possible_map_root_path()
+    {
+      // Arrange
+      // Act
+      using (new FakeHttpContext())
+      {
+        // Assert
+        HttpContext.Current.Server.MapPath("/").Should().Be(AppDomain.CurrentDomain.BaseDirectory + "\\");
+      }
+    }
   }
 }
