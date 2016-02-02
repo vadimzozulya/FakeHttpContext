@@ -1,31 +1,31 @@
 ﻿namespace FakeHttpContext.Tests.Switchers
 {
-  using System;
+    using System;
 
-  using global::FakeHttpContext.Switchers;
+    using global::FakeHttpContext.Switchers;
 
-  using FluentAssertions;
+    using FluentAssertions;
 
-  using Ploeh.AutoFixture.Xunit2;
+    using Ploeh.AutoFixture.Xunit2;
 
-  using Xunit;
+    using Xunit;
 
-  public class AppDomainDataSwitcherTests
-  {
-    [Theory, AutoData]
-    public void Should_set_data(string name, string oldValue, string newValue)
+    public class AppDomainDataSwitcherTests
     {
-      // Arrange
-      AppDomain.CurrentDomain.SetData(name, oldValue);
+        [Theory, AutoData]
+        public void Should_set_data(string name, string oldValue, string newValue)
+        {
+            // Arrange
+            AppDomain.CurrentDomain.SetData(name, oldValue);
 
-      // Act
-      using (new AppDomainDataSwitcher { { name, newValue } })
-      {
-        // Assert
-        AppDomain.CurrentDomain.GetData(name).Should().Be(newValue);
-      }
+            // Act
+            using (new AppDomainDataSwitcher { { name, newValue } })
+            {
+                // Assert
+                AppDomain.CurrentDomain.GetData(name).Should().Be(newValue);
+            }
 
-      AppDomain.CurrentDomain.GetData(name).Should().Be(oldValue);
+            AppDomain.CurrentDomain.GetData(name).Should().Be(oldValue);
+        }
     }
-  }
 }
