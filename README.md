@@ -2,8 +2,8 @@
 FakeHttpContext
 ===============
 
-![#](https://img.shields.io/nuget/dt/FakeHttpContext.svg)
-![#](https://img.shields.io/nuget/v/FakeHttpContext.svg)
+[![#](https://img.shields.io/nuget/dt/FakeHttpContext.svg)](https://www.nuget.org/packages/FakeHttpContext/)
+[![#](https://img.shields.io/nuget/v/FakeHttpContext.svg)](https://www.nuget.org/packages/FakeHttpContext/)
 
 This util allow to initialize HttpContex.Current with fake context.
 
