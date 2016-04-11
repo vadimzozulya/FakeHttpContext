@@ -49,6 +49,17 @@ public void Should_allow_to_use_map_path()
     HttpContext.Current.Server.MapPath("myPath").Should().Be(expectedPath);
   }
 }
+
+[Theory, AutoData]
+public void Should_be_possible_to_fake_http_headers(string headerKey, string headerValue)
+{
+    // Act
+    using (new FakeHttpContext { { headerKey, headerValue } })
+    {
+        // Assert
+        HttpContext.Current.Request.Headers[headerKey].Should().Be(headerValue);
+    }
+}
 ```
 
 For more examples please see FakeHttpContext.Tests project
