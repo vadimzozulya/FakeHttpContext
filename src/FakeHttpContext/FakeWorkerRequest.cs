@@ -1,6 +1,9 @@
 namespace FakeHttpContext
 {
     using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Linq;
     using System.Web;
 
     internal class FakeWorkerRequest : HttpWorkerRequest
@@ -21,6 +24,8 @@ namespace FakeHttpContext
                 this.uri = value;
             }
         }
+
+        public Dictionary<string, string > Headers { get; } = new Dictionary<string, string>();
 
         /// <summary>
         /// Returns the virtual path to the requested URI.
@@ -221,6 +226,12 @@ namespace FakeHttpContext
         public override string GetProtocol()
         {
             return this.Uri.Scheme;
+        }
+
+        public override string[][] GetUnknownRequestHeaders()
+        {
+            var unknownRequestHeaders = this.Headers.Select(x => new[] { x.Key, x.Value }).ToArray();
+            return unknownRequestHeaders;
         }
     }
 }

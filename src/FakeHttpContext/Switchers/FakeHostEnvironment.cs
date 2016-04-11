@@ -27,7 +27,7 @@ namespace FakeHttpContext.Switchers
                     });
             this.Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appVirtualPath", GetVirtualPath()));
             this.Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_configMapPath", new FakeConfigMapPath()));
-            this.Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment,"_appPhysicalPath",AppDomain.CurrentDomain.BaseDirectory));
+            this.Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appPhysicalPath", AppDomain.CurrentDomain.BaseDirectory));
         }
 
         public override void Dispose()

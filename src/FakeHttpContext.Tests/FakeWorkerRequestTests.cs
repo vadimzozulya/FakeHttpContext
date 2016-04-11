@@ -57,5 +57,19 @@
             worker.GetUriPath().Should().Be(uri.LocalPath);
             worker.GetQueryString().Should().Be(expectedQuery);
         }
+
+        [Theory, AutoData]
+        public void Should_read_unknown_headers_from_headers_property(string key, string value)
+        {
+            // Arrange
+            var worker = new FakeWorkerRequest();
+            worker.Headers.Add(key, value);
+
+            // Act
+            var unknownHeaders = worker.GetUnknownRequestHeaders();
+
+            // Assert
+            unknownHeaders.ShouldBeEquivalentTo(new[] { new[] { key, value } });
+        }
     }
 }

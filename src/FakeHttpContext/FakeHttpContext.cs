@@ -8,7 +8,7 @@ namespace FakeHttpContext
 
     using global::FakeHttpContext.Switchers;
 
-    public class FakeHttpContext : SwitcherContainer
+    public class FakeHttpContext : SwitcherContainer, IEnumerable
     {
         private readonly HttpContext conextBackup;
 
@@ -68,6 +68,18 @@ namespace FakeHttpContext
         {
             base.Dispose();
             HttpContext.Current = this.conextBackup;
+        }
+
+        public void Add(string headerKey, string headerValue)
+        {
+            this.fakeWorkerRequest.Headers.Add(headerKey, headerValue);
+
+            HttpContext.Current.Request.SetPrivateFieldValue("_headers", null);
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            throw new NotImplementedException();
         }
     }
 }
