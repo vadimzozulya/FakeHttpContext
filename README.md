@@ -54,7 +54,7 @@ public void Should_allow_to_use_map_path()
 public void Should_be_possible_to_fake_http_headers(string headerKey, string headerValue)
 {
     // Act
-    using (new FakeHttpContext { { headerKey, headerValue } })
+    using (new FakeHttpContext { Request = { { headerKey, headerValue } } })
     {
         // Assert
         HttpContext.Current.Request.Headers[headerKey].Should().Be(headerValue);

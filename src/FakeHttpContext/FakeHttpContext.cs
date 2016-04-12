@@ -8,7 +8,7 @@ namespace FakeHttpContext
 
     using global::FakeHttpContext.Switchers;
 
-    public class FakeHttpContext : SwitcherContainer, IEnumerable
+    public class FakeHttpContext : SwitcherContainer
     {
         private readonly HttpContext conextBackup;
 
@@ -16,8 +16,11 @@ namespace FakeHttpContext
 
         public FakeHttpContext()
         {
+            this.Request = new FakeRequest(this.fakeWorkerRequest);
+
             this.conextBackup = HttpContext.Current;
             this.Switchers.Add(new FakeHostEnvironment());
+
             HttpContext.Current = new HttpContext(this.fakeWorkerRequest);
 
             HttpContext.Current.Request.Browser = new HttpBrowserCapabilities { Capabilities = new Hashtable() };
@@ -64,22 +67,12 @@ namespace FakeHttpContext
             set { HttpContext.Current.Request.Browser.Capabilities = value; }
         }
 
+        public FakeRequest Request { get; }
+
         public override void Dispose()
         {
             base.Dispose();
             HttpContext.Current = this.conextBackup;
-        }
-
-        public void Add(string headerKey, string headerValue)
-        {
-            this.fakeWorkerRequest.Headers.Add(headerKey, headerValue);
-
-            HttpContext.Current.Request.SetPrivateFieldValue("_headers", null);
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            throw new NotImplementedException();
         }
     }
 }
