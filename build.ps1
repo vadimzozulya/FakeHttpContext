@@ -1,7 +1,7 @@
 param
 (
   [Parameter(Mandatory=$false)][string] $nugetPackagesOutput = $PSScriptRoot + "\output",
-  [Parameter(Mandatory=$false)][string] $msbuild = "C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild.exe",
+  [Parameter(Mandatory=$false)][string] $msbuild = "C:\Program Files (x86)\MSBuild\14.0\Bin\MsBuild.exe",
   [Parameter(Mandatory=$false)][string] $nugetExe = ".\src\.nuget\NuGet.exe",
   [switch] $pushPackage
 )
@@ -20,8 +20,8 @@ function Build-Solution(){
   $target =  "/t:Build"
   $buildConfiguration = "/p:Configuration=Release"
 
-  $buildCmd = "$msbuild  $solution $target $buildConfiguration"
-  iex $buildCmd
+  $arguments = @($solution, $target, $buildConfiguration)
+  & $msbuild $arguments
 }
 
 function Build-Nuget-Packages(){
