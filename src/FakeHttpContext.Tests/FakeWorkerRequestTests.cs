@@ -1,6 +1,7 @@
 ﻿namespace FakeHttpContext.Tests
 {
     using System;
+    using System.Runtime.Remoting.Messaging;
     using System.Web;
 
     using FluentAssertions;
@@ -70,6 +71,19 @@
 
             // Assert
             unknownHeaders.ShouldBeEquivalentTo(new[] { new[] { key, value } });
+        }
+
+        [Theory, AutoData]
+        public void Should_return_accept_types(string expectedAcceptTypes)
+        {
+            // Arrange
+            var worker = new FakeWorkerRequest {AcceptTypes = expectedAcceptTypes};
+
+            // Act
+            var acceptTypes = worker.GetKnownRequestHeader(HttpWorkerRequest.HeaderAccept);
+
+            // Assert
+            acceptTypes.Should().Be(expectedAcceptTypes);
         }
     }
 }

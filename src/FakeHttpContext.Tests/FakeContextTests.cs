@@ -200,5 +200,23 @@
                 HttpContext.Current.Request.Headers[headerKey].Should().Be(headerValue);
             }
         }
+
+        [Fact]
+        public void Should_be_possible_to_fake_accept_types()
+        {
+            // Arrange
+            using (
+                new FakeHttpContext
+                    {
+                        Request = { AcceptTypes = new[] { "application/json", "application/javascript" } }
+                    })
+            {
+                // Act
+
+                // Assert
+                HttpContext.Current.Request.AcceptTypes.Should()
+                    .BeEquivalentTo("application/json", "application/javascript");
+            }
+        }
     }
 }

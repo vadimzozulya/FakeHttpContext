@@ -14,6 +14,14 @@ namespace FakeHttpContext
             this.workerRequest = workerRequest;
         }
 
+        public IEnumerable<string> AcceptTypes
+        {
+            set
+            {
+                this.workerRequest.AcceptTypes = string.Join(",", value);
+            }
+        }
+
         public void Add(string headerKey, string headerValue)
         {
             this.workerRequest.Headers.Add(headerKey, headerValue);

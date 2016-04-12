@@ -27,6 +27,8 @@ namespace FakeHttpContext
 
         public Dictionary<string, string > Headers { get; } = new Dictionary<string, string>();
 
+        public string AcceptTypes { get; set; }
+
         /// <summary>
         /// Returns the virtual path to the requested URI.
         /// </summary>
@@ -212,6 +214,8 @@ namespace FakeHttpContext
                     return this.UserAgent;
                 case HttpWorkerRequest.HeaderHost:
                     return this.Uri.Host + ":" + this.Uri.Port;
+                case HttpWorkerRequest.HeaderAccept:
+                    return this.AcceptTypes;
             }
 
             return null;
