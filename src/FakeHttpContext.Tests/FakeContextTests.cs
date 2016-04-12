@@ -172,5 +172,51 @@
                 HttpContext.Current.Server.MapPath("/").Should().Be(AppDomain.CurrentDomain.BaseDirectory + "\\");
             }
         }
+
+        [Theory, AutoData]
+        public void Should_be_possible_to_fake_http_headers(string headerKey, string headerValue)
+        {
+            // Act
+            using (new FakeHttpContext { Request = { { headerKey, headerValue } } })
+            {
+                // Assert
+                HttpContext.Current.Request.Headers[headerKey].Should().Be(headerValue);
+            }
+        }
+
+        [Theory, AutoData]
+        public void Should_be_possible_to_fake_http_header_if_the_property_header_is_already_initialized(string headerKey, string headerValue)
+        {
+            // Arrange
+            using (var fakeContext = new FakeHttpContext())
+            {
+                // ReSharper disable once UnusedVariable
+                var touchHeaders = HttpContext.Current.Request.Headers;
+
+                // Act
+                fakeContext.Request.Add(headerKey, headerValue);
+
+                // Assert
+                HttpContext.Current.Request.Headers[headerKey].Should().Be(headerValue);
+            }
+        }
+
+        [Fact]
+        public void Should_be_possible_to_fake_accept_types()
+        {
+            // Arrange
+            using (
+                new FakeHttpContext
+                    {
+                        Request = { AcceptTypes = new[] { "application/json", "application/javascript" } }
+                    })
+            {
+                // Act
+
+                // Assert
+                HttpContext.Current.Request.AcceptTypes.Should()
+                    .BeEquivalentTo("application/json", "application/javascript");
+            }
+        }
     }
 }

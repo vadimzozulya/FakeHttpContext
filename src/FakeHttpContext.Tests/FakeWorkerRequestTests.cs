@@ -1,6 +1,7 @@
 ﻿namespace FakeHttpContext.Tests
 {
     using System;
+    using System.Runtime.Remoting.Messaging;
     using System.Web;
 
     using FluentAssertions;
@@ -56,6 +57,33 @@
             worker.GetLocalPort().Should().Be(uri.Port);
             worker.GetUriPath().Should().Be(uri.LocalPath);
             worker.GetQueryString().Should().Be(expectedQuery);
+        }
+
+        [Theory, AutoData]
+        public void Should_read_unknown_headers_from_headers_property(string key, string value)
+        {
+            // Arrange
+            var worker = new FakeWorkerRequest();
+            worker.Headers.Add(key, value);
+
+            // Act
+            var unknownHeaders = worker.GetUnknownRequestHeaders();
+
+            // Assert
+            unknownHeaders.ShouldBeEquivalentTo(new[] { new[] { key, value } });
+        }
+
+        [Theory, AutoData]
+        public void Should_return_accept_types(string expectedAcceptTypes)
+        {
+            // Arrange
+            var worker = new FakeWorkerRequest {AcceptTypes = expectedAcceptTypes};
+
+            // Act
+            var acceptTypes = worker.GetKnownRequestHeader(HttpWorkerRequest.HeaderAccept);
+
+            // Assert
+            acceptTypes.Should().Be(expectedAcceptTypes);
         }
     }
 }

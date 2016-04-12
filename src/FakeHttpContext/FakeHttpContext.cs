@@ -16,8 +16,11 @@ namespace FakeHttpContext
 
         public FakeHttpContext()
         {
+            this.Request = new FakeRequest(this.fakeWorkerRequest);
+
             this.conextBackup = HttpContext.Current;
             this.Switchers.Add(new FakeHostEnvironment());
+
             HttpContext.Current = new HttpContext(this.fakeWorkerRequest);
 
             HttpContext.Current.Request.Browser = new HttpBrowserCapabilities { Capabilities = new Hashtable() };
@@ -63,6 +66,8 @@ namespace FakeHttpContext
             get { return HttpContext.Current.Request.Browser.Capabilities; }
             set { HttpContext.Current.Request.Browser.Capabilities = value; }
         }
+
+        public FakeRequest Request { get; }
 
         public override void Dispose()
         {
