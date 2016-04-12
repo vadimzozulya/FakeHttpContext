@@ -4,3 +4,4 @@ obj/
 *.suo
 *.exe
 src/packages/
+output/
