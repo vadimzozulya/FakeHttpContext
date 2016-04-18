@@ -1,3 +1,6 @@
+0.2.1
+* [Fix] #3: Don't throw NotImplementedException (thanks to  @ffMathy)
+
 0.2.0
 * [NEW] #2: Request: Please make it possible to fake HTTP headers
 
