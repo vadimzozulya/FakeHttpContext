@@ -134,7 +134,6 @@ namespace FakeHttpContext
         /// <param name="statusCode">The status code to send </param><param name="statusDescription">The status description to send. </param>
         public override void SendStatus(int statusCode, string statusDescription)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -143,7 +142,6 @@ namespace FakeHttpContext
         /// <param name="index">The header index. For example, <see cref="F:System.Web.HttpWorkerRequest.HeaderContentLength"/>. </param><param name="value">The value of the header. </param>
         public override void SendKnownResponseHeader(int index, string value)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -152,7 +150,6 @@ namespace FakeHttpContext
         /// <param name="name">The name of the header to send. </param><param name="value">The value of the header. </param>
         public override void SendUnknownResponseHeader(string name, string value)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -161,7 +158,6 @@ namespace FakeHttpContext
         /// <param name="data">The byte array to send. </param><param name="length">The number of bytes to send, starting at the first byte. </param>
         public override void SendResponseFromMemory(byte[] data, int length)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -170,7 +166,6 @@ namespace FakeHttpContext
         /// <param name="filename">The name of the file to send. </param><param name="offset">The starting position in the file. </param><param name="length">The number of bytes to send. </param>
         public override void SendResponseFromFile(string filename, long offset, long length)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -179,7 +174,6 @@ namespace FakeHttpContext
         /// <param name="handle">The handle of the file to send. </param><param name="offset">The starting position in the file. </param><param name="length">The number of bytes to send. </param>
         public override void SendResponseFromFile(IntPtr handle, long offset, long length)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -188,7 +182,6 @@ namespace FakeHttpContext
         /// <param name="finalFlush">true if this is the last time response data will be flushed; otherwise, false. </param>
         public override void FlushResponse(bool finalFlush)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -196,7 +189,6 @@ namespace FakeHttpContext
         /// </summary>
         public override void EndOfRequest()
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
