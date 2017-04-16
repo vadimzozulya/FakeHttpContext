@@ -34,6 +34,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluentAssertions, Version=3.4.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.3.4.0\lib\net45\FluentAssertions.dll</HintPath>
@@ -79,6 +85,7 @@
     <Compile Include="Switchers\SwitcherContainerTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="key.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
