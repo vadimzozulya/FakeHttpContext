@@ -25,6 +25,10 @@ function Build-Solution(){
   & $msbuild $arguments
 }
 
+function Run-Tests(){
+  & "C:\Codding\github\FakeHttpContext\src\packages\xunit.runner.console.2.2.0\tools\xunit.console.exe" .\src\FakeHttpContext.Tests\bin\Release\FakeHttpContext.Tests.dll
+}
+
 function Build-Nuget-Packages(){
   if (Test-Path $nugetPackagesOutput) {
     gci -Path $nugetPackagesOutput -Include "*.*" -File -Recurse | foreach{ $_.Delete()}
@@ -57,6 +61,7 @@ function Push-Nuget-Package(){
 }
 
 Build-Solution
+Run-Tests
 Build-Nuget-Packages
 if ($pushPackage) {
   Push-Nuget-Package
