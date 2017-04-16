@@ -8,7 +8,7 @@ namespace FakeHttpContext
 
     internal class FakeWorkerRequest : HttpWorkerRequest
     {
-        private Uri uri;
+        private Uri _uri;
 
         public string UserAgent { get; set; }
 
@@ -16,12 +16,12 @@ namespace FakeHttpContext
         {
             get
             {
-                return this.uri ?? (this.uri = new Uri("http://[::1]:4293/Default"));
+                return _uri ?? (_uri = new Uri("http://[::1]:4293/Default"));
             }
 
             set
             {
-                this.uri = value;
+                _uri = value;
             }
         }
 
@@ -37,7 +37,7 @@ namespace FakeHttpContext
         /// </returns>
         public override string GetUriPath()
         {
-            return this.Uri.LocalPath;
+            return Uri.LocalPath;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace FakeHttpContext
         /// </returns>
         public override string GetQueryString()
         {
-            return this.Uri.Query.TrimStart('?');
+            return Uri.Query.TrimStart('?');
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace FakeHttpContext
         /// </returns>
         public override string GetLocalAddress()
         {
-            return this.Uri.Host;
+            return Uri.Host;
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace FakeHttpContext
         /// </returns>
         public override int GetLocalPort()
         {
-            return this.Uri.Port;
+            return Uri.Port;
         }
 
         /// <summary>
@@ -203,11 +203,11 @@ namespace FakeHttpContext
             switch (index)
             {
                 case HttpWorkerRequest.HeaderUserAgent:
-                    return this.UserAgent;
+                    return UserAgent;
                 case HttpWorkerRequest.HeaderHost:
-                    return this.Uri.Host + ":" + this.Uri.Port;
+                    return Uri.Host + ":" + Uri.Port;
                 case HttpWorkerRequest.HeaderAccept:
-                    return this.AcceptTypes;
+                    return AcceptTypes;
             }
 
             return null;
@@ -221,12 +221,12 @@ namespace FakeHttpContext
         /// </returns>
         public override string GetProtocol()
         {
-            return this.Uri.Scheme;
+            return Uri.Scheme;
         }
 
         public override string[][] GetUnknownRequestHeaders()
         {
-            var unknownRequestHeaders = this.Headers.Select(x => new[] { x.Key, x.Value }).ToArray();
+            var unknownRequestHeaders = Headers.Select(x => new[] { x.Key, x.Value }).ToArray();
             return unknownRequestHeaders;
         }
     }

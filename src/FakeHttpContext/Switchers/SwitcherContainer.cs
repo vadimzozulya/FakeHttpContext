@@ -7,14 +7,14 @@
     {
         protected SwitcherContainer()
         {
-            this.Switchers = new List<IDisposable>();
+            Switchers = new List<IDisposable>();
         }
 
         protected internal List<IDisposable> Switchers { get; private set; }
 
         public virtual void Dispose()
         {
-            this.Switchers.ForEach(x => x.Dispose());
+            Switchers.ForEach(x => x.Dispose());
         }
     }
 }

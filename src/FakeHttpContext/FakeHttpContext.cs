@@ -10,18 +10,18 @@ namespace FakeHttpContext
 
     public class FakeHttpContext : SwitcherContainer
     {
-        private readonly HttpContext conextBackup;
+        private readonly HttpContext _conextBackup;
 
-        private readonly FakeWorkerRequest fakeWorkerRequest = new FakeWorkerRequest();
+        private readonly FakeWorkerRequest _fakeWorkerRequest = new FakeWorkerRequest();
 
         public FakeHttpContext()
         {
-            this.Request = new FakeRequest(this.fakeWorkerRequest);
+            Request = new FakeRequest(_fakeWorkerRequest);
 
-            this.conextBackup = HttpContext.Current;
-            this.Switchers.Add(new FakeHostEnvironment());
+            _conextBackup = HttpContext.Current;
+            Switchers.Add(new FakeHostEnvironment());
 
-            HttpContext.Current = new HttpContext(this.fakeWorkerRequest);
+            HttpContext.Current = new HttpContext(_fakeWorkerRequest);
 
             HttpContext.Current.Request.Browser = new HttpBrowserCapabilities { Capabilities = new Hashtable() };
 
@@ -48,8 +48,8 @@ namespace FakeHttpContext
         {
             set
             {
-                this.fakeWorkerRequest.UserAgent = value;
-                this.Capabilities["browser"] = value;
+                _fakeWorkerRequest.UserAgent = value;
+                Capabilities["browser"] = value;
             }
         }
 
@@ -57,7 +57,7 @@ namespace FakeHttpContext
         {
             set
             {
-                this.fakeWorkerRequest.Uri = value;
+                _fakeWorkerRequest.Uri = value;
             }
         }
 
@@ -72,7 +72,7 @@ namespace FakeHttpContext
         public override void Dispose()
         {
             base.Dispose();
-            HttpContext.Current = this.conextBackup;
+            HttpContext.Current = _conextBackup;
         }
     }
 }

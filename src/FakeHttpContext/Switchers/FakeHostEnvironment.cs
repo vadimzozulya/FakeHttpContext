@@ -18,16 +18,16 @@ namespace FakeHttpContext.Switchers
             var hostringEnvironmentType = typeof(HostingEnvironment);
             var theHostingEnvironment = hostringEnvironmentType.GetPrivateStaticFieldValue("_theHostingEnvironment");
 
-            this.Switchers.Add(
+            Switchers.Add(
                 new AppDomainDataSwitcher
                     {
                         { ".appPath", AppDomain.CurrentDomain.BaseDirectory },
                         { ".appDomain", "*" },
                         { ".appVPath", "/" }
                     });
-            this.Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appVirtualPath", GetVirtualPath()));
-            this.Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_configMapPath", new FakeConfigMapPath()));
-            this.Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appPhysicalPath", AppDomain.CurrentDomain.BaseDirectory));
+            Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appVirtualPath", GetVirtualPath()));
+            Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_configMapPath", new FakeConfigMapPath()));
+            Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appPhysicalPath", AppDomain.CurrentDomain.BaseDirectory));
         }
 
         public override void Dispose()
