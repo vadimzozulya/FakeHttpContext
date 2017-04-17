@@ -1,26 +1,26 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
 namespace FakeHttpContext.Switchers
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-
     internal class AppDomainDataSwitcher : SwitcherContainer, IEnumerable
     {
         internal Dictionary<string, object[]> FakeLocalStore { get; private set; }
 
         public AppDomainDataSwitcher()
         {
-            this.FakeLocalStore =
+            FakeLocalStore =
                 new Dictionary<string, object[]>(
                     AppDomain.CurrentDomain.GetPrivateFieldValue<Dictionary<string, object[]>>("_LocalStore")
                     ?? new Dictionary<string, object[]>());
 
-            this.Switchers.Add(new PrivateFieldSwitcher(AppDomain.CurrentDomain, "_LocalStore", this.FakeLocalStore));
+            Switchers.Add(new PrivateFieldSwitcher(AppDomain.CurrentDomain, "_LocalStore", FakeLocalStore));
         }
 
         public IEnumerator GetEnumerator()
         {
-            return this.FakeLocalStore.GetEnumerator();
+            return FakeLocalStore.GetEnumerator();
         }
 
         public void Add(string name, object value)

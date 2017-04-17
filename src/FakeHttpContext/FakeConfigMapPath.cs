@@ -1,11 +1,13 @@
+using System;
+using System.IO;
+using System.Web.Configuration;
+
 namespace FakeHttpContext
 {
-    using System;
-    using System.IO;
-    using System.Web.Configuration;
-
     internal class FakeConfigMapPath : IConfigMapPath
     {
+        public string BasePath { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
+
         /// <summary>
         /// Gets the machine-configuration file name.
         /// </summary>
@@ -64,7 +66,7 @@ namespace FakeHttpContext
         /// <param name="siteID">A unique identifier for the site.</param><param name="path">The URL associated with the site.</param>
         public string MapPath(string siteID, string path)
         {
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path.TrimStart('/').Replace('/', '\\'));
+            return Path.Combine(BasePath, path.TrimStart('/').Replace('/', '\\'));
         }
 
         /// <summary>

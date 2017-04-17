@@ -1,19 +1,19 @@
+using System;
+
 namespace FakeHttpContext.Switchers
 {
-    using System;
-
     internal class PrivateFieldSwitcher : IDisposable
     {
-        private readonly object backupValue;
+        private readonly object _backupValue;
 
         public PrivateFieldSwitcher(object tartget, string fieldName, object value)
         {
-            this.Tartget = tartget;
-            this.FieldName = fieldName;
-            this.NewValue = value;
+            Tartget = tartget;
+            FieldName = fieldName;
+            NewValue = value;
 
-            this.backupValue = this.Tartget.GetPrivateFieldValue(this.FieldName);
-            this.Tartget.SetPrivateFieldValue(this.FieldName, value);
+            _backupValue = Tartget.GetPrivateFieldValue(FieldName);
+            Tartget.SetPrivateFieldValue(FieldName, value);
         }
 
         internal object Tartget { get; private set; }
@@ -27,7 +27,7 @@ namespace FakeHttpContext.Switchers
         /// </summary>
         public void Dispose()
         {
-            this.Tartget.SetPrivateFieldValue(this.FieldName, this.backupValue);
+            Tartget.SetPrivateFieldValue(FieldName, _backupValue);
         }
     }
 }

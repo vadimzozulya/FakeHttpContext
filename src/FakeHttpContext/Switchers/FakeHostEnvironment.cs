@@ -1,12 +1,14 @@
+using System;
+using System.Reflection;
+using System.Web;
+using System.Web.Hosting;
+
 namespace FakeHttpContext.Switchers
 {
-    using System;
-    using System.Reflection;
-    using System.Web;
-    using System.Web.Hosting;
-
     internal class FakeHostEnvironment : SwitcherContainer
     {
+        private readonly FakeConfigMapPath _configMapPath = new FakeConfigMapPath();
+
         public FakeHostEnvironment()
         {
             if (HostingEnvironment.IsHosted)
@@ -18,22 +20,27 @@ namespace FakeHttpContext.Switchers
             var hostringEnvironmentType = typeof(HostingEnvironment);
             var theHostingEnvironment = hostringEnvironmentType.GetPrivateStaticFieldValue("_theHostingEnvironment");
 
-            this.Switchers.Add(
+            Switchers.Add(
                 new AppDomainDataSwitcher
                     {
                         { ".appPath", AppDomain.CurrentDomain.BaseDirectory },
                         { ".appDomain", "*" },
                         { ".appVPath", "/" }
                     });
-            this.Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appVirtualPath", GetVirtualPath()));
-            this.Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_configMapPath", new FakeConfigMapPath()));
-            this.Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appPhysicalPath", AppDomain.CurrentDomain.BaseDirectory));
+            Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appVirtualPath", GetVirtualPath()));
+            Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_configMapPath", _configMapPath));
+            Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appPhysicalPath", AppDomain.CurrentDomain.BaseDirectory));
         }
 
         public override void Dispose()
         {
             base.Dispose();
             typeof(HostingEnvironment).SetPrivateStaticFieldValue("_theHostingEnvironment", null);
+        }
+
+        public string BasePath
+        {
+            set { _configMapPath.BasePath = value; }
         }
 
         private static object GetVirtualPath()

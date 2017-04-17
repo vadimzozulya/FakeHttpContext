@@ -1,8 +1,8 @@
 param
 (
   [Parameter(Mandatory=$false)][string] $nugetPackagesOutput = $PSScriptRoot + "\output",
-  [Parameter(Mandatory=$false)][string] $msbuild = "C:\Program Files (x86)\MSBuild\14.0\Bin\MsBuild.exe",
-  [Parameter(Mandatory=$false)][string] $nugetExe = ".\src\.nuget\NuGet.exe",
+  [Parameter(Mandatory=$false)][string] $msbuild = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe",
+  [Parameter(Mandatory=$false)][string] $nugetExe = "nuget.exe",
   [switch] $pushPackage
 )
 
@@ -20,8 +20,13 @@ function Build-Solution(){
   $target =  "/t:Build"
   $buildConfiguration = "/p:Configuration=Release"
 
+  nuget restore $solution
   $arguments = @($solution, $target, $buildConfiguration)
   & $msbuild $arguments
+}
+
+function Run-Tests(){
+  & "C:\Codding\github\FakeHttpContext\src\packages\xunit.runner.console.2.2.0\tools\xunit.console.exe" .\src\FakeHttpContext.Tests\bin\Release\FakeHttpContext.Tests.dll
 }
 
 function Build-Nuget-Packages(){
@@ -56,6 +61,7 @@ function Push-Nuget-Package(){
 }
 
 Build-Solution
+Run-Tests
 Build-Nuget-Packages
 if ($pushPackage) {
   Push-Nuget-Package

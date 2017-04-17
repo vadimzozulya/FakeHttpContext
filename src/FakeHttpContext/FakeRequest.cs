@@ -1,30 +1,30 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Web;
+
 namespace FakeHttpContext
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Web;
-
     public class FakeRequest : IEnumerable
     {
-        private readonly FakeWorkerRequest workerRequest;
+        private readonly FakeWorkerRequest _workerRequest;
 
         internal FakeRequest(FakeWorkerRequest workerRequest)
         {
-            this.workerRequest = workerRequest;
+            _workerRequest = workerRequest;
         }
 
         public IEnumerable<string> AcceptTypes
         {
             set
             {
-                this.workerRequest.AcceptTypes = string.Join(",", value);
+                _workerRequest.AcceptTypes = string.Join(",", value);
             }
         }
 
         public void Add(string headerKey, string headerValue)
         {
-            this.workerRequest.Headers.Add(headerKey, headerValue);
+            _workerRequest.Headers.Add(headerKey, headerValue);
 
             HttpContext.Current.Request.SetPrivateFieldValue("_headers", null);
         }
