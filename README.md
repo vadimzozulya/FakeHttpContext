@@ -1,6 +1,7 @@
 # FakeHttpContext
 
 [![#](https://img.shields.io/nuget/v/FakeHttpContext.svg)](https://www.nuget.org/packages/FakeHttpContext/)
+[![Build status](https://ci.appveyor.com/api/projects/status/l2jnlqj0vtkbr6ob?svg=true)](https://ci.appveyor.com/project/vadimzozulya/fakehttpcontext)
 
 This util allows to initialize `HttpContex.Current` with fake context.
 
