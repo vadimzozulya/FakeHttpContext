@@ -1,17 +1,14 @@
+# FakeHttpContext
 
-FakeHttpContext
-===============
-
-[![#](https://img.shields.io/nuget/dt/FakeHttpContext.svg)](https://www.nuget.org/packages/FakeHttpContext/)
 [![#](https://img.shields.io/nuget/v/FakeHttpContext.svg)](https://www.nuget.org/packages/FakeHttpContext/)
 
-This util allow to initialize HttpContex.Current with fake context.
+This util allows to initialize `HttpContex.Current` with fake context.
 
 ## Install with NuGet
 You can install the utility with [NuGet](https://www.nuget.org/packages/FakeHttpContext/)
 
-Examples
----
+## Examples
+
 ```csharp
 [Fact]
 public void Should_initialize_HttpContext_Current()
@@ -62,4 +59,4 @@ public void Should_be_possible_to_fake_http_headers(string headerKey, string hea
 }
 ```
 
-For more examples please see FakeHttpContext.Tests project
+For more examples please see `FakeHttpContext.Tests` project.
