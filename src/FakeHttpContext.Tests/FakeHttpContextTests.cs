@@ -8,7 +8,7 @@ using Xunit;
 
 namespace FakeHttpContext.Tests
 {
-    public class FakeContextTests
+    public class FakeHttpContextTests
     {
         [Fact]
         public void Should_initialize_httpContext_current()
@@ -157,7 +157,7 @@ namespace FakeHttpContext.Tests
         }
 
         [Fact]
-        public void Should_be_possible_map_root_path()
+        public void Should_be_possible_to_map_root_path()
         {
             // Arrange
             // Act
