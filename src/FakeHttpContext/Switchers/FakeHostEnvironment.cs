@@ -1,10 +1,10 @@
+using System;
+using System.Reflection;
+using System.Web;
+using System.Web.Hosting;
+
 namespace FakeHttpContext.Switchers
 {
-    using System;
-    using System.Reflection;
-    using System.Web;
-    using System.Web.Hosting;
-
     internal class FakeHostEnvironment : SwitcherContainer
     {
         public FakeHostEnvironment()

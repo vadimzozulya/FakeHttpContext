@@ -1,13 +1,12 @@
+using System;
+using System.Collections;
+using System.Reflection;
+using System.Web;
+using System.Web.SessionState;
+using FakeHttpContext.Switchers;
+
 namespace FakeHttpContext
 {
-    using System;
-    using System.Collections;
-    using System.Reflection;
-    using System.Web;
-    using System.Web.SessionState;
-
-    using global::FakeHttpContext.Switchers;
-
     public class FakeHttpContext : SwitcherContainer
     {
         private readonly HttpContext _conextBackup;

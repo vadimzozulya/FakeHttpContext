@@ -1,11 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
 namespace FakeHttpContext
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Linq;
-    using System.Web;
-
     internal class FakeWorkerRequest : HttpWorkerRequest
     {
         private Uri _uri;

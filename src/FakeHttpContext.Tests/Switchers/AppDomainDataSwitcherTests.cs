@@ -1,15 +1,11 @@
-﻿namespace FakeHttpContext.Tests.Switchers
+﻿using System;
+using FakeHttpContext.Switchers;
+using FluentAssertions;
+using Ploeh.AutoFixture.Xunit2;
+using Xunit;
+
+namespace FakeHttpContext.Tests.Switchers
 {
-    using System;
-
-    using global::FakeHttpContext.Switchers;
-
-    using FluentAssertions;
-
-    using Ploeh.AutoFixture.Xunit2;
-
-    using Xunit;
-
     public class AppDomainDataSwitcherTests
     {
         [Theory, AutoData]

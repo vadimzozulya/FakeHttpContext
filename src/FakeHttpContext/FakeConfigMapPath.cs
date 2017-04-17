@@ -1,9 +1,9 @@
+using System;
+using System.IO;
+using System.Web.Configuration;
+
 namespace FakeHttpContext
 {
-    using System;
-    using System.IO;
-    using System.Web.Configuration;
-
     internal class FakeConfigMapPath : IConfigMapPath
     {
         /// <summary>

@@ -1,7 +1,7 @@
+using System;
+
 namespace FakeHttpContext.Switchers
 {
-    using System;
-
     internal class PrivateFieldSwitcher : IDisposable
     {
         private readonly object _backupValue;

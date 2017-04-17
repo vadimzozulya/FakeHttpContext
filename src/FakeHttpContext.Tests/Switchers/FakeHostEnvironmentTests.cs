@@ -1,15 +1,11 @@
-﻿namespace FakeHttpContext.Tests.Switchers
+﻿using System;
+using System.Web.Hosting;
+using FakeHttpContext.Switchers;
+using FluentAssertions;
+using Xunit;
+
+namespace FakeHttpContext.Tests.Switchers
 {
-    using System;
-
-    using System.Web.Hosting;
-
-    using global::FakeHttpContext.Switchers;
-
-    using FluentAssertions;
-
-    using Xunit;
-
     public class FakeHostEnvironmentTests
     {
         [Fact]

@@ -1,13 +1,10 @@
-﻿namespace FakeHttpContext.Tests.Switchers
+﻿using System;
+using FakeHttpContext.Switchers;
+using NSubstitute;
+using Xunit;
+
+namespace FakeHttpContext.Tests.Switchers
 {
-    using System;
-
-    using global::FakeHttpContext.Switchers;
-
-    using NSubstitute;
-
-    using Xunit;
-
     public class SwitcherContainerTests
     {
         [Fact]

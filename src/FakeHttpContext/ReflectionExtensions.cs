@@ -1,8 +1,8 @@
-﻿namespace FakeHttpContext
-{
-    using System;
-    using System.Reflection;
+﻿using System;
+using System.Reflection;
 
+namespace FakeHttpContext
+{
     internal static class ReflectionExtensions
     {
         public static object GetPrivateStaticFieldValue(this Type type, string fieldName)

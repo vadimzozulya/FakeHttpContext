@@ -1,17 +1,13 @@
-﻿namespace FakeHttpContext.Tests
+﻿using System;
+using System.Collections;
+using System.IO;
+using System.Web;
+using FluentAssertions;
+using Ploeh.AutoFixture.Xunit2;
+using Xunit;
+
+namespace FakeHttpContext.Tests
 {
-    using System;
-    using System.Collections;
-    using System.IO;
-    using System.Web;
-
-    using FluentAssertions;
-
-    using Ploeh.AutoFixture.Xunit2;
-
-    using Xunit;
-
-    /// <summary>The fake context tests.</summary>
     public class FakeContextTests
     {
         [Fact]
@@ -25,7 +21,6 @@
             }
         }
 
-        /// <summary>The should_ fact method name.</summary>
         [Fact]
         public void Should_restore_previous_context()
         {

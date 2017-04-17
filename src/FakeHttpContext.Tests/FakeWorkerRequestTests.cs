@@ -1,15 +1,11 @@
-﻿namespace FakeHttpContext.Tests
+﻿using System;
+using System.Web;
+using FluentAssertions;
+using Ploeh.AutoFixture.Xunit2;
+using Xunit;
+
+namespace FakeHttpContext.Tests
 {
-    using System;
-    using System.Runtime.Remoting.Messaging;
-    using System.Web;
-
-    using FluentAssertions;
-
-    using Ploeh.AutoFixture.Xunit2;
-
-    using Xunit;
-
     public class FakeWorkerRequestTests
     {
         [Theory, AutoData]
@@ -77,7 +73,7 @@
         public void Should_return_accept_types(string expectedAcceptTypes)
         {
             // Arrange
-            var worker = new FakeWorkerRequest {AcceptTypes = expectedAcceptTypes};
+            var worker = new FakeWorkerRequest { AcceptTypes = expectedAcceptTypes };
 
             // Act
             var acceptTypes = worker.GetKnownRequestHeader(HttpWorkerRequest.HeaderAccept);

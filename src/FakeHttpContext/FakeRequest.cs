@@ -1,10 +1,10 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Web;
+
 namespace FakeHttpContext
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Web;
-
     public class FakeRequest : IEnumerable
     {
         private readonly FakeWorkerRequest _workerRequest;
