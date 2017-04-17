@@ -7,6 +7,8 @@ namespace FakeHttpContext.Switchers
 {
     internal class FakeHostEnvironment : SwitcherContainer
     {
+        private readonly FakeConfigMapPath _configMapPath = new FakeConfigMapPath();
+
         public FakeHostEnvironment()
         {
             if (HostingEnvironment.IsHosted)
@@ -26,7 +28,7 @@ namespace FakeHttpContext.Switchers
                         { ".appVPath", "/" }
                     });
             Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appVirtualPath", GetVirtualPath()));
-            Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_configMapPath", new FakeConfigMapPath()));
+            Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_configMapPath", _configMapPath));
             Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appPhysicalPath", AppDomain.CurrentDomain.BaseDirectory));
         }
 
@@ -34,6 +36,11 @@ namespace FakeHttpContext.Switchers
         {
             base.Dispose();
             typeof(HostingEnvironment).SetPrivateStaticFieldValue("_theHostingEnvironment", null);
+        }
+
+        public string BasePath
+        {
+            set { _configMapPath.BasePath = value; }
         }
 
         private static object GetVirtualPath()

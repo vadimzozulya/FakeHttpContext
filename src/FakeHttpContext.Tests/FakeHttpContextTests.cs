@@ -202,15 +202,43 @@ namespace FakeHttpContext.Tests
             // Arrange
             using (
                 new FakeHttpContext
-                    {
-                        Request = { AcceptTypes = new[] { "application/json", "application/javascript" } }
-                    })
+                {
+                    // Act
+                    Request = { AcceptTypes = new[] { "application/json", "application/javascript" } }
+                })
             {
-                // Act
-
                 // Assert
                 HttpContext.Current.Request.AcceptTypes.Should()
                     .BeEquivalentTo("application/json", "application/javascript");
+            }
+        }
+
+        [Theory]
+        [InlineAutoData("a:/pase_path")]
+        [InlineAutoData("b:\\pase_path")]
+        public void Should_be_possible_to_set_base_path_for_MapPath(string basePath, string path)
+        {
+            var expectedPath = Path.Combine(basePath, path);
+            using(new FakeHttpContext { BasePath = basePath })
+            {
+                HttpContext.Current.Server.MapPath(path).Should().Be(expectedPath);
+            }
+        }
+
+        [Theory]
+        [InlineAutoData("/pase_path")]
+        [InlineAutoData("\\pase_path")]
+        [InlineAutoData("pase_path")]
+        [InlineAutoData("pase_pathC:\\")]
+        public void Should_throw_if_BasePath_Is_Not_Absolute(string basePath, string path)
+        {
+            using (var context = new FakeHttpContext())
+            {
+                Action action = () => context.BasePath = basePath;
+
+                action.ShouldThrow<ArgumentException>()
+                    .Where(x => x.Message.StartsWith("BasePath must be an absolute path.")
+                                && x.ParamName == "value");
             }
         }
     }

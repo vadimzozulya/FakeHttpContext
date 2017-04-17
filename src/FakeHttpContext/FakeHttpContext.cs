@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.SessionState;
 using FakeHttpContext.Switchers;
@@ -10,15 +12,15 @@ namespace FakeHttpContext
     public class FakeHttpContext : SwitcherContainer
     {
         private readonly HttpContext _conextBackup;
-
         private readonly FakeWorkerRequest _fakeWorkerRequest = new FakeWorkerRequest();
+        private readonly FakeHostEnvironment _fakeHostEnvironment = new FakeHostEnvironment();
 
         public FakeHttpContext()
         {
             Request = new FakeRequest(_fakeWorkerRequest);
 
             _conextBackup = HttpContext.Current;
-            Switchers.Add(new FakeHostEnvironment());
+            Switchers.Add(_fakeHostEnvironment);
 
             HttpContext.Current = new HttpContext(_fakeWorkerRequest);
 
@@ -67,6 +69,24 @@ namespace FakeHttpContext
         }
 
         public FakeRequest Request { get; }
+
+        /// <summary>
+        /// Sets the base path for HttpContext.Current.Server.MapPath method.
+        /// </summary>
+        /// <remarks>
+        /// The path must be an absolute path.
+        /// </remarks>
+        public string BasePath
+        {
+            set
+            {
+                if (!Regex.IsMatch(value, @"^[a-zA-Z]:(\\|/).*"))
+                {
+                    throw new ArgumentException("BasePath must be an absolute path.", nameof(value));
+                }
+                _fakeHostEnvironment.BasePath = value;
+            }
+        }
 
         public override void Dispose()
         {
