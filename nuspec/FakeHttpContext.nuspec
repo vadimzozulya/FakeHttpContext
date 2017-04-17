@@ -5,6 +5,7 @@
     <version>00.00</version>
     <authors>Vadim Zozulya</authors>
     <owners>Vadim Zozulya</owners>
+    <licenseUrl>https://github.com/vadimzozulya/FakeHttpContext/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/vadimzozulya/FakeHttpContext</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Fake HttpContext for unit tests</description>
