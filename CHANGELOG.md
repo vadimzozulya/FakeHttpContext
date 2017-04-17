@@ -1,3 +1,7 @@
+0.3.0
+* [NEW] #5: Modify base for MapPath
+* [NEW] #6: Sign so can use from Gac'd assembly (thanks to @dazinator)
+
 0.2.1
 * [Fix] #3: Don't throw NotImplementedException (thanks to  @ffMathy)
 
