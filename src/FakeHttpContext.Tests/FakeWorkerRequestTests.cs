@@ -12,7 +12,7 @@ namespace FakeHttpContext.Tests
         public void Should_return_user_agent(string useraAgent)
         {
             // Arrange
-            var worker = new FakeWorkerRequest { UserAgent = useraAgent };
+            var worker = new FakeGetWorkerRequest { UserAgent = useraAgent };
 
             // Act
             var headerUserAgent = worker.GetKnownRequestHeader(HttpWorkerRequest.HeaderUserAgent);
@@ -25,7 +25,7 @@ namespace FakeHttpContext.Tests
         public void Should_have_default_uri()
         {
             // Arrange
-            var worker = new FakeWorkerRequest();
+            var worker = new FakeGetWorkerRequest();
 
             // Act
 
@@ -41,7 +41,7 @@ namespace FakeHttpContext.Tests
         {
             // Arrange
             var uri = new Uri(uriString);
-            var worker = new FakeWorkerRequest { Uri = uri };
+            var worker = new FakeGetWorkerRequest { Uri = uri };
 
             // Act
             var headerHost = worker.GetKnownRequestHeader(HttpWorkerRequest.HeaderHost);
@@ -59,7 +59,7 @@ namespace FakeHttpContext.Tests
         public void Should_read_unknown_headers_from_headers_property(string key, string value)
         {
             // Arrange
-            var worker = new FakeWorkerRequest();
+            var worker = new FakeGetWorkerRequest();
             worker.Headers.Add(key, value);
 
             // Act
@@ -73,7 +73,7 @@ namespace FakeHttpContext.Tests
         public void Should_return_accept_types(string expectedAcceptTypes)
         {
             // Arrange
-            var worker = new FakeWorkerRequest { AcceptTypes = expectedAcceptTypes };
+            var worker = new FakeGetWorkerRequest { AcceptTypes = expectedAcceptTypes };
 
             // Act
             var acceptTypes = worker.GetKnownRequestHeader(HttpWorkerRequest.HeaderAccept);

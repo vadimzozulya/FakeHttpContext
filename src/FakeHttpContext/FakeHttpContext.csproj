@@ -43,7 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FakeConfigMapPath.cs" />
+    <Compile Include="FakeGetWorkerRequest.cs" />
     <Compile Include="FakeHttpContext.cs" />
+    <Compile Include="FakePostWorkerRequest.cs" />
     <Compile Include="FakeRequest.cs" />
     <Compile Include="FakeWorkerRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

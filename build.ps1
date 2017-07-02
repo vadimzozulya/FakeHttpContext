@@ -26,7 +26,7 @@ function Build-Solution(){
 }
 
 function Run-Tests(){
-  & "C:\Codding\github\FakeHttpContext\src\packages\xunit.runner.console.2.2.0\tools\xunit.console.exe" .\src\FakeHttpContext.Tests\bin\Release\FakeHttpContext.Tests.dll
+  & "$PSScriptRoot\src\packages\xunit.runner.console.2.2.0\tools\xunit.console.exe" .\src\FakeHttpContext.Tests\bin\Release\FakeHttpContext.Tests.dll
 }
 
 function Build-Nuget-Packages(){

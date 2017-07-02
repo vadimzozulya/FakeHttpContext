@@ -5,7 +5,7 @@ using System.Web;
 
 namespace FakeHttpContext
 {
-    internal class FakeWorkerRequest : HttpWorkerRequest
+    public abstract class FakeWorkerRequest : HttpWorkerRequest
     {
         private Uri _uri;
 
@@ -59,17 +59,6 @@ namespace FakeHttpContext
         public override string GetRawUrl()
         {
             return "/Default";
-        }
-
-        /// <summary>
-        /// Returns the specified member of the request header.
-        /// </summary>
-        /// <returns>
-        /// The HTTP verb returned in the request header.
-        /// </returns>
-        public override string GetHttpVerbName()
-        {
-            return "GET";
         }
 
         /// <summary>
