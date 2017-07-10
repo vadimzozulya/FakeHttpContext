@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using System.Web;
 
 namespace FakeHttpContext
@@ -19,6 +20,16 @@ namespace FakeHttpContext
             set
             {
                 _workerRequest.AcceptTypes = string.Join(",", value);
+            }
+        }
+
+        public FakePostData PostData
+        {
+            set
+            {
+                var encoding = value.Encoding ?? Encoding.ASCII;
+                _workerRequest.SetPostData(encoding.GetBytes(value.Data));
+                HttpContext.Current.Request.ContentEncoding = encoding;
             }
         }
 

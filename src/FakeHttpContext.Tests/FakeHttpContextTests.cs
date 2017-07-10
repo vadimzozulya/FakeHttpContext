@@ -1,9 +1,9 @@
-﻿using System;
+﻿using FluentAssertions;
+using Ploeh.AutoFixture.Xunit2;
+using System;
 using System.Collections;
 using System.IO;
 using System.Web;
-using FluentAssertions;
-using Ploeh.AutoFixture.Xunit2;
 using Xunit;
 
 namespace FakeHttpContext.Tests
@@ -219,7 +219,7 @@ namespace FakeHttpContext.Tests
         public void Should_be_possible_to_set_base_path_for_MapPath(string basePath, string path)
         {
             var expectedPath = Path.Combine(basePath, path);
-            using(new FakeHttpContext { BasePath = basePath })
+            using (new FakeHttpContext { BasePath = basePath })
             {
                 HttpContext.Current.Server.MapPath(path).Should().Be(expectedPath);
             }
@@ -239,6 +239,60 @@ namespace FakeHttpContext.Tests
                 action.ShouldThrow<ArgumentException>()
                     .Where(x => x.Message.StartsWith("BasePath must be an absolute path.")
                                 && x.ParamName == "value");
+            }
+        }
+
+        [Theory]
+        [InlineData(10)]
+        [InlineData(8191)]
+        [InlineData(8192)]
+        [InlineData(8193)]
+        [InlineData(8194)]
+        [InlineData(8 * 4 * 1024)]
+        public void Should_provide_the_post_data_in_the_inputstream(int dataLength)
+        {
+            // Arrange
+            var expectedData = "".PadLeft(dataLength, 'a');
+
+            using (var context = new FakeHttpContext
+            {
+                // Act
+                Request = { PostData = new FakePostData(expectedData) }
+            })
+            {
+                HttpContext.Current.Request.InputStream.Seek(0, SeekOrigin.Begin);
+                using (var reader = new StreamReader(HttpContext.Current.Request.InputStream))
+                {
+                    var actualData = reader.ReadToEnd();
+
+                    // Assert
+                    actualData.Should().Be(expectedData);
+                }
+            }
+        }
+
+        [Theory, AutoData]
+        public void Should_encode_post_data_with_provided_encoding(string postData)
+        {
+            // Arrange
+            using (var context = new FakeHttpContext
+            {
+                // Act
+                Request =
+                {
+                    PostData = new FakePostData(postData, System.Text.Encoding.UTF32)
+                }
+            })
+            {
+                HttpContext.Current.Request.InputStream.Seek(0, SeekOrigin.Begin);
+                using (var reader = new StreamReader(HttpContext.Current.Request.InputStream, System.Text.Encoding.UTF32))
+                {
+                    var actualData = reader.ReadToEnd();
+
+                    // Assert
+                    actualData.Should().Be(postData);
+                    HttpContext.Current.Request.ContentEncoding.Should().Be(System.Text.Encoding.UTF32);
+                }
             }
         }
     }

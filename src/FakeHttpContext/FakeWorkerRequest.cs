@@ -8,6 +8,7 @@ namespace FakeHttpContext
     internal class FakeWorkerRequest : HttpWorkerRequest
     {
         private Uri _uri;
+        private byte[] _postData;
 
         public string UserAgent { get; set; }
 
@@ -69,7 +70,7 @@ namespace FakeHttpContext
         /// </returns>
         public override string GetHttpVerbName()
         {
-            return "GET";
+            return _postData == null ? "GET" : "POST";
         }
 
         /// <summary>
@@ -227,6 +228,21 @@ namespace FakeHttpContext
         {
             var unknownRequestHeaders = Headers.Select(x => new[] { x.Key, x.Value }).ToArray();
             return unknownRequestHeaders;
+        }
+
+        public override byte[] GetPreloadedEntityBody()
+        {
+            return _postData;
+        }
+
+        public override bool IsEntireEntityBodyIsPreloaded()
+        {
+            return _postData != null;
+        }
+
+        internal void SetPostData(byte[] data)
+        {
+            _postData = data;
         }
     }
 }

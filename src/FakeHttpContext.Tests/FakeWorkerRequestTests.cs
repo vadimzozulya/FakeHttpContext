@@ -81,5 +81,64 @@ namespace FakeHttpContext.Tests
             // Assert
             acceptTypes.Should().Be(expectedAcceptTypes);
         }
+
+        [Theory, AutoData]
+        public void Should_return_post_string_as_array_of_butes(byte[] data)
+        {
+            // Arrange
+            var worker = new FakeWorkerRequest();
+            worker.SetPostData(data);
+
+            // Act
+            var actualData = worker.GetPreloadedEntityBody();
+
+            // Assert
+            actualData.Should().BeSameAs(data);
+        }
+
+        [Theory, AutoData]
+        public void Should_return_empy_bytes_array_if_post_data_is_not_set()
+        {
+            // Arrange
+            var worker = new FakeWorkerRequest();
+
+            // Act
+            var actualData = worker.GetPreloadedEntityBody();
+
+            // Assert
+            actualData.Should().BeNull();
+        }
+
+        [Theory]
+        [InlineAutoData("POST")]
+        [InlineData("GET", null)]
+        public void Should_swith_request_werb_to_post(string expectedVern, byte[] data)
+        {
+            // Arrange
+            var worker = new FakeWorkerRequest();
+            worker.SetPostData(data);
+
+            // Act
+            var actualVerb = worker.GetHttpVerbName();
+
+            // Assert
+            actualVerb.Should().Be(expectedVern);
+        }
+
+        [Theory]
+        [InlineAutoData(true)]
+        [InlineData(false, null)]
+        public void Should_state_that_body_is_compeletely_preloaded(bool expectedResult, byte[] postData)
+        {
+            // Arrange
+            var worker = new FakeWorkerRequest();
+            worker.SetPostData(postData);
+
+            // Act
+            var isEntireEntityBodyIsPreloaded = worker.IsEntireEntityBodyIsPreloaded();
+
+            // Assert
+            isEntireEntityBodyIsPreloaded.Should().Be(expectedResult);
+        }
     }
 }
