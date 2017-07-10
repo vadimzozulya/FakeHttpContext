@@ -1,27 +1,22 @@
-using FakeHttpContext.Switchers;
 using System;
 using System.Collections;
+using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.SessionState;
+using FakeHttpContext.Switchers;
 
 namespace FakeHttpContext
 {
     public class FakeHttpContext : SwitcherContainer
     {
         private readonly HttpContext _conextBackup;
-        private readonly FakeWorkerRequest _fakeWorkerRequest;
+        private readonly FakeWorkerRequest _fakeWorkerRequest = new FakeWorkerRequest();
         private readonly FakeHostEnvironment _fakeHostEnvironment = new FakeHostEnvironment();
 
         public FakeHttpContext()
-            : this(new FakeGetWorkerRequest())
-        { }
-
-        public FakeHttpContext(FakeWorkerRequest fakeWorkerRequest)
         {
-            _fakeWorkerRequest = fakeWorkerRequest;
-
             Request = new FakeRequest(_fakeWorkerRequest);
 
             _conextBackup = HttpContext.Current;

@@ -5,9 +5,10 @@ using System.Web;
 
 namespace FakeHttpContext
 {
-    public abstract class FakeWorkerRequest : HttpWorkerRequest
+    internal class FakeWorkerRequest : HttpWorkerRequest
     {
         private Uri _uri;
+        private byte[] _postData;
 
         public string UserAgent { get; set; }
 
@@ -59,6 +60,17 @@ namespace FakeHttpContext
         public override string GetRawUrl()
         {
             return "/Default";
+        }
+
+        /// <summary>
+        /// Returns the specified member of the request header.
+        /// </summary>
+        /// <returns>
+        /// The HTTP verb returned in the request header.
+        /// </returns>
+        public override string GetHttpVerbName()
+        {
+            return _postData == null ? "GET" : "POST";
         }
 
         /// <summary>
@@ -216,6 +228,21 @@ namespace FakeHttpContext
         {
             var unknownRequestHeaders = Headers.Select(x => new[] { x.Key, x.Value }).ToArray();
             return unknownRequestHeaders;
+        }
+
+        public override byte[] GetPreloadedEntityBody()
+        {
+            return _postData;
+        }
+
+        public override bool IsEntireEntityBodyIsPreloaded()
+        {
+            return _postData != null;
+        }
+
+        internal void SetPostData(byte[] data)
+        {
+            _postData = data;
         }
     }
 }

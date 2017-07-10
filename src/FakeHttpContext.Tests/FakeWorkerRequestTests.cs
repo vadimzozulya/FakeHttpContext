@@ -12,7 +12,7 @@ namespace FakeHttpContext.Tests
         public void Should_return_user_agent(string useraAgent)
         {
             // Arrange
-            var worker = new FakeGetWorkerRequest { UserAgent = useraAgent };
+            var worker = new FakeWorkerRequest { UserAgent = useraAgent };
 
             // Act
             var headerUserAgent = worker.GetKnownRequestHeader(HttpWorkerRequest.HeaderUserAgent);
@@ -25,7 +25,7 @@ namespace FakeHttpContext.Tests
         public void Should_have_default_uri()
         {
             // Arrange
-            var worker = new FakeGetWorkerRequest();
+            var worker = new FakeWorkerRequest();
 
             // Act
 
@@ -41,7 +41,7 @@ namespace FakeHttpContext.Tests
         {
             // Arrange
             var uri = new Uri(uriString);
-            var worker = new FakeGetWorkerRequest { Uri = uri };
+            var worker = new FakeWorkerRequest { Uri = uri };
 
             // Act
             var headerHost = worker.GetKnownRequestHeader(HttpWorkerRequest.HeaderHost);
@@ -59,7 +59,7 @@ namespace FakeHttpContext.Tests
         public void Should_read_unknown_headers_from_headers_property(string key, string value)
         {
             // Arrange
-            var worker = new FakeGetWorkerRequest();
+            var worker = new FakeWorkerRequest();
             worker.Headers.Add(key, value);
 
             // Act
@@ -73,13 +73,72 @@ namespace FakeHttpContext.Tests
         public void Should_return_accept_types(string expectedAcceptTypes)
         {
             // Arrange
-            var worker = new FakeGetWorkerRequest { AcceptTypes = expectedAcceptTypes };
+            var worker = new FakeWorkerRequest { AcceptTypes = expectedAcceptTypes };
 
             // Act
             var acceptTypes = worker.GetKnownRequestHeader(HttpWorkerRequest.HeaderAccept);
 
             // Assert
             acceptTypes.Should().Be(expectedAcceptTypes);
+        }
+
+        [Theory, AutoData]
+        public void Should_return_post_string_as_array_of_butes(byte[] data)
+        {
+            // Arrange
+            var worker = new FakeWorkerRequest();
+            worker.SetPostData(data);
+
+            // Act
+            var actualData = worker.GetPreloadedEntityBody();
+
+            // Assert
+            actualData.Should().BeSameAs(data);
+        }
+
+        [Theory, AutoData]
+        public void Should_return_empy_bytes_array_if_post_data_is_not_set()
+        {
+            // Arrange
+            var worker = new FakeWorkerRequest();
+
+            // Act
+            var actualData = worker.GetPreloadedEntityBody();
+
+            // Assert
+            actualData.Should().BeNull();
+        }
+
+        [Theory]
+        [InlineAutoData("POST")]
+        [InlineData("GET", null)]
+        public void Should_swith_request_werb_to_post(string expectedVern, byte[] data)
+        {
+            // Arrange
+            var worker = new FakeWorkerRequest();
+            worker.SetPostData(data);
+
+            // Act
+            var actualVerb = worker.GetHttpVerbName();
+
+            // Assert
+            actualVerb.Should().Be(expectedVern);
+        }
+
+        [Theory]
+        [InlineAutoData(true)]
+        [InlineData(false, null)]
+        public void Should_state_that_body_is_compeletely_preloaded(bool expectedResult, byte[] postData)
+        {
+            // Arrange
+            var worker = new FakeWorkerRequest();
+            worker.SetPostData(postData);
+
+            // Act
+            var isEntireEntityBodyIsPreloaded = worker.IsEntireEntityBodyIsPreloaded();
+
+            // Assert
+            isEntireEntityBodyIsPreloaded.Should().Be(expectedResult);
         }
     }
 }
