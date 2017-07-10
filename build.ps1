@@ -55,7 +55,7 @@ function Push-Nuget-Package(){
   if (Ask-YesOrNo(" Will be pushed to the server: `n$names")) {
     $packages | foreach {
       $package = $_.FullName
-      iex "$nugetExe push $package"
+      iex "$nugetExe push $package -Source https://www.nuget.org/api/v2/package"
     }
   }
 }
