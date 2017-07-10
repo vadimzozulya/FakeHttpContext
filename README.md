@@ -58,6 +58,30 @@ public void Should_be_possible_to_fake_http_headers(string headerKey, string hea
         HttpContext.Current.Request.Headers[headerKey].Should().Be(headerValue);
     }
 }
+
+[Theory, AutoData]
+public void Should_be_possible_to_fake_post_request(string postData){
+  // Arrange
+    using (var context = new FakeHttpContext
+    {
+        // Act
+        Request =
+        {
+            PostData = new FakePostData(postData, System.Text.Encoding.UTF32)
+        }
+    })
+    {
+        HttpContext.Current.Request.InputStream.Seek(0, SeekOrigin.Begin);
+        using (var reader = new StreamReader(HttpContext.Current.Request.InputStream, System.Text.Encoding.UTF32))
+        {
+            var actualData = reader.ReadToEnd();
+
+            // Assert
+            actualData.Should().Be(postData);
+            HttpContext.Current.Request.ContentEncoding.Should().Be(System.Text.Encoding.UTF32);
+        }
+    }
+}
 ```
 
 For more examples please see `FakeHttpContext.Tests` project.  

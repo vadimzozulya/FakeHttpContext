@@ -1,3 +1,6 @@
+## 0.4.0
+* [NEW] #4: It's possible now to set post data (thanks to @kristianhald)
+
 ## 0.3.1
 * Add MIT license
 
