@@ -60,4 +60,7 @@ public void Should_be_possible_to_fake_http_headers(string headerKey, string hea
 }
 ```
 
-For more examples please see `FakeHttpContext.Tests` project.
+For more examples please see `FakeHttpContext.Tests` project.  
+Great tool [AutoFixture](https://github.com/AutoFixture/AutoFixture) is used in
+the test and examples, you definitely should try it, if you haven't yet
+:thumbsup:!
