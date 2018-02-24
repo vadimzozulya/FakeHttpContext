@@ -11,3 +11,14 @@ after_test:
   - ps: '& ".\pack.ps1"'
 artifacts:
   - path: 'output\*.nupkg'
+deploy:
+  - provider: GitHub
+    artifact: /.*\.nupkg/
+    release: $(appveyor_repo_tag_name)
+    draft: true
+    prerelease: false
+    auth_token:
+        secure: c88+SkzG9YaQKGJSC1HwE1xkxzkMQ/Z0HquvWU08KEIWK7WceksndLmKoIxpsQu+
+    on:
+      branch: master
+      appveyor_repo_tag: true
