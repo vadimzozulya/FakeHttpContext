@@ -1,3 +1,6 @@
+## 0.4.1
+* [Fix] #9: Getting a System.InvalidOperationException: Only one HostingEnvironment is allowed in an AppDomain
+
 ## 0.4.0
 * [NEW] #8: It's possible now to set post data (thanks to @kristianhald)
 
