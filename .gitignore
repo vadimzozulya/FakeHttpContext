@@ -6,3 +6,4 @@ obj/
 src/packages/
 output/
 .idea/
+.vs/

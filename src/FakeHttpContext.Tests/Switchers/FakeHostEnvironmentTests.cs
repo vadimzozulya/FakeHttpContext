@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Hosting;
 using FakeHttpContext.Switchers;
 using FluentAssertions;
+using NSubstitute;
 using Xunit;
 
 namespace FakeHttpContext.Tests.Switchers
@@ -65,7 +68,7 @@ namespace FakeHttpContext.Tests.Switchers
         }
 
         [Fact]
-        public void Should_do_nothing_if_is_already_hosted()
+        public void Should_throw_InvlidOperationException_if_alderdy_intantiated_in_the_same_thread()
         {
             // Arrange
             using (new FakeHostEnvironment())
@@ -79,7 +82,7 @@ namespace FakeHttpContext.Tests.Switchers
                     };
 
                 // Assert
-                action.ShouldNotThrow();
+                action.ShouldThrow<InvalidOperationException>().WithMessage("Only one instance of FakeHostedEnvironment is allowed in a thread.");
             }
         }
 
@@ -97,6 +100,123 @@ namespace FakeHttpContext.Tests.Switchers
                         && ((PrivateFieldSwitcher)x).FieldName == "_appPhysicalPath"
                         && (string)((PrivateFieldSwitcher)x).NewValue == AppDomain.CurrentDomain.BaseDirectory);
             }
+        }
+
+        [Fact]
+        public void Should_be_possible_to_intantiate_environment_in_parallel()
+        {
+            // Arrange
+            var tasks = new List<Task>();
+            for (var i = 0; i < 100; i++)
+            {
+                tasks.Add(Task.Run(() =>
+                {
+                    using (new FakeHostEnvironment())
+                    {
+                    }
+                }));
+            }
+
+            // Act
+            Action action = () => Task.WaitAll(tasks.ToArray());
+
+            // Assert
+            action.ShouldNotThrow();
+        }
+
+        [Fact]
+        public void Should_not_stack_if_initialization_is_failed()
+        {
+            // Arrange
+            using (new HostingEnvironmentInitializator())
+            {
+                var tasks = new List<Task>();
+                for (var i = 0; i < 2; i++)
+                {
+                    tasks.Add(Task.Run(() =>
+                    {
+                        try
+                        {
+                            using (new FakeHostEnvironment())
+                            {
+                            }
+                        }
+                        catch
+                        {
+                            // ignored
+                        }
+                    }));
+                }
+
+                // Act && Assert
+                Task.WaitAll(tasks.ToArray(), TimeSpan.FromSeconds(2)).Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public void Should_not_swallow_initialization_exception()
+        {
+            // Arrange
+            using (new HostingEnvironmentInitializator())
+            {
+                Action action = () =>
+                {
+                    // Act
+                    using (new FakeHostEnvironment())
+                    {
+                    }
+                };
+
+                // Assert
+                action.ShouldThrow<InvalidOperationException>();
+            }
+        }
+
+        [Fact]
+        public void Should_not_stack_if_switchers_throw_on_dispose()
+        {
+            var tasks = new List<Task>();
+            for (var i = 0; i < 2; i++)
+            {
+                tasks.Add(Task.Run(() =>
+                {
+                    try
+                    {
+                        using (var env = new FakeHostEnvironment())
+                        {
+                            var disposable = Substitute.For<IDisposable>();
+                            disposable.When(x => x.Dispose()).Throw<Exception>();
+                            env.Switchers.Add(disposable);
+                        }
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+                }));
+            }
+
+            // Act && Assert
+            Task.WaitAll(tasks.ToArray(), TimeSpan.FromSeconds(2)).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Should_not_swallow_disposal_exception()
+        {
+            // Arrange
+            Action action = () =>
+            {
+                // Act
+                using (var env = new FakeHostEnvironment())
+                {
+                    var disposable = Substitute.For<IDisposable>();
+                    disposable.When(x => x.Dispose()).Throw<Exception>();
+                    env.Switchers.Add(disposable);
+                }
+            };
+
+            // Assert
+            action.ShouldThrow<Exception>();
         }
     }
 }

@@ -51,6 +51,7 @@
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="Switchers\AppDomainDataSwitcher.cs" />
     <Compile Include="Switchers\FakeHostEnvironment.cs" />
+    <Compile Include="Switchers\HostingEnvironmentInitializator.cs" />
     <Compile Include="Switchers\PrivateFieldSwitcher.cs" />
     <Compile Include="Switchers\SwitcherContainer.cs" />
   </ItemGroup>
