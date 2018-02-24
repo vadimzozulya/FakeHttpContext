@@ -12,6 +12,14 @@ after_test:
 artifacts:
   - path: 'output\*.nupkg'
 deploy:
+  - provider: NuGet
+    api_key:
+      secure: 6RCAME9ubTeKvj1cSeybJohOkgHSakCyRy3pHgxbUm0LBAZRbncRz01pKoc0mcK1
+    skip_symbols: true
+    artifact: /.*\.nupkg/
+    on:
+      branch: master
+      appveyor_repo_tag: true
   - provider: GitHub
     artifact: /.*\.nupkg/
     release: $(appveyor_repo_tag_name)
