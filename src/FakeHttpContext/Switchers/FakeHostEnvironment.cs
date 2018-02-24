@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Threading;
 using System.Web;
 using System.Web.Hosting;
 
@@ -7,40 +8,65 @@ namespace FakeHttpContext.Switchers
 {
     internal class FakeHostEnvironment : SwitcherContainer
     {
+        private const string AlreadyInstantiatedMessage =
+            "Only one instance of FakeHostedEnvironment is allowed in a thread.";
+
+        private static readonly object SyncObject = new object();
+
+        [ThreadStatic] private static bool _isInstantiated;
+
         private readonly FakeConfigMapPath _configMapPath = new FakeConfigMapPath();
 
         public FakeHostEnvironment()
         {
-            if (HostingEnvironment.IsHosted)
+            if (_isInstantiated) throw new InvalidOperationException(AlreadyInstantiatedMessage);
+
+            Monitor.Enter(SyncObject);
+            if (_isInstantiated) throw new InvalidOperationException(AlreadyInstantiatedMessage);
+
+            try
             {
-                return;
-            }
+                Switchers.Add(new HostingEnvironmentInitializator());
+                var hostringEnvironmentType = typeof(HostingEnvironment);
+                var theHostingEnvironment =
+                    hostringEnvironmentType.GetPrivateStaticFieldValue("_theHostingEnvironment");
 
-            new HostingEnvironment();
-            var hostringEnvironmentType = typeof(HostingEnvironment);
-            var theHostingEnvironment = hostringEnvironmentType.GetPrivateStaticFieldValue("_theHostingEnvironment");
-
-            Switchers.Add(
-                new AppDomainDataSwitcher
+                Switchers.Add(
+                    new AppDomainDataSwitcher
                     {
-                        { ".appPath", AppDomain.CurrentDomain.BaseDirectory },
-                        { ".appDomain", "*" },
-                        { ".appVPath", "/" }
+                        {".appPath", AppDomain.CurrentDomain.BaseDirectory},
+                        {".appDomain", "*"},
+                        {".appVPath", "/"}
                     });
-            Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appVirtualPath", GetVirtualPath()));
-            Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_configMapPath", _configMapPath));
-            Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appPhysicalPath", AppDomain.CurrentDomain.BaseDirectory));
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            typeof(HostingEnvironment).SetPrivateStaticFieldValue("_theHostingEnvironment", null);
+                Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appVirtualPath", GetVirtualPath()));
+                Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_configMapPath", _configMapPath));
+                Switchers.Add(new PrivateFieldSwitcher(theHostingEnvironment, "_appPhysicalPath",
+                    AppDomain.CurrentDomain.BaseDirectory));
+                _isInstantiated = true;
+            }
+            catch
+            {
+                Monitor.Exit(SyncObject);
+                throw;
+            }
         }
 
         public string BasePath
         {
             set { _configMapPath.BasePath = value; }
+        }
+
+        public override void Dispose()
+        {
+            try
+            {
+                base.Dispose();
+            }
+            finally
+            {
+                Monitor.Exit(SyncObject);
+                _isInstantiated = false;
+            }
         }
 
         private static object GetVirtualPath()

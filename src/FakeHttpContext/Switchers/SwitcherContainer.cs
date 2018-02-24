@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FakeHttpContext.Switchers
 {
@@ -14,7 +15,22 @@ namespace FakeHttpContext.Switchers
 
         public virtual void Dispose()
         {
-            Switchers.ForEach(x => x.Dispose());
+            var exceptions = new List<Exception>();
+            Switchers.ForEach(x =>
+            {
+                try
+                {
+                    x.Dispose();
+                }
+                catch (Exception e)
+                {
+                    exceptions.Add(e);
+                }
+            });
+            if (exceptions.Any())
+            {
+                throw new AggregateException(exceptions);
+            }
         }
     }
 }

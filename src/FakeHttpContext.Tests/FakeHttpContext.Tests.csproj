@@ -82,6 +82,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Switchers\AppDomainDataSwitcherTests.cs" />
     <Compile Include="Switchers\FakeHostEnvironmentTests.cs" />
+    <Compile Include="Switchers\HostingEnvironmentInitializatorTests.cs" />
     <Compile Include="Switchers\PrivateFieldSwitcherTests.cs" />
     <Compile Include="Switchers\SwitcherContainerTests.cs" />
   </ItemGroup>

@@ -2,7 +2,9 @@
 using Ploeh.AutoFixture.Xunit2;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Web;
 using Xunit;
 
@@ -254,7 +256,7 @@ namespace FakeHttpContext.Tests
             // Arrange
             var expectedData = "".PadLeft(dataLength, 'a');
 
-            using (var context = new FakeHttpContext
+            using (new FakeHttpContext
             {
                 // Act
                 Request = { PostData = new FakePostData(expectedData) }
@@ -275,7 +277,7 @@ namespace FakeHttpContext.Tests
         public void Should_encode_post_data_with_provided_encoding(string postData)
         {
             // Arrange
-            using (var context = new FakeHttpContext
+            using (new FakeHttpContext
             {
                 // Act
                 Request =
@@ -294,6 +296,24 @@ namespace FakeHttpContext.Tests
                     HttpContext.Current.Request.ContentEncoding.Should().Be(System.Text.Encoding.UTF32);
                 }
             }
+        }
+
+        [Fact]
+        public void Should_be_parrallel_execution_friendly()
+        {
+            var tasks = new List<Task>();
+            for (var i = 0; i < 100; i++)
+            {
+                tasks.Add(
+                    Task.Run(() =>
+                    {
+                        using (new FakeHttpContext())
+                        {
+                        }
+                    }));
+            }
+
+            Task.WaitAll(tasks.ToArray());
         }
     }
 }
