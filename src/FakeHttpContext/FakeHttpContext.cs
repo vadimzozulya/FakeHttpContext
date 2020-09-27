@@ -10,9 +10,9 @@ namespace FakeHttpContext
 {
     public class FakeHttpContext : SwitcherContainer
     {
-        private readonly HttpContext _conextBackup;
-        private readonly FakeWorkerRequest _fakeWorkerRequest = new FakeWorkerRequest();
-        private readonly FakeHostEnvironment _fakeHostEnvironment = new FakeHostEnvironment();
+        protected readonly HttpContext _conextBackup;
+        protected readonly FakeWorkerRequest _fakeWorkerRequest = new FakeWorkerRequest();
+        protected readonly FakeHostEnvironment _fakeHostEnvironment = new FakeHostEnvironment();
 
         public FakeHttpContext()
         {
