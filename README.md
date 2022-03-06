@@ -1,3 +1,9 @@
+![UkraineFlagGIF](https://user-images.githubusercontent.com/10955191/156920460-a8625478-d145-44d5-8348-fd0c1976f0fc.gif)
+
+‼️ Please help Ukraine to resist Russian aggression: <https://bank.gov.ua/en/news/all/natsionalniy-bank-vidkriv-spetsrahunok-dlya-zboru-koshtiv-na-potrebi-armiyi>
+
+**Help to stop them before too late!**
+
 # FakeHttpContext
 
 [![#](https://img.shields.io/nuget/v/FakeHttpContext.svg)](https://www.nuget.org/packages/FakeHttpContext/)
